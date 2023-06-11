@@ -1,7 +1,9 @@
+import Reception from "Source/components/Reception";
+
 export default function page() {
     return (
         <>
-            <h1>Pagina de Recepcion</h1>
+            <Reception/>
         </>
     );
 }
