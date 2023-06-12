@@ -1,6 +1,8 @@
 'use client'
 
 import { Column } from 'primereact/column';
+import { ColumnGroup } from 'primereact/columngroup'
+import { Row } from 'primereact/row'
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
@@ -11,21 +13,21 @@ export default function Reception() {
         {
             name: "Jose Suarez",
             cc: 123456789,
-            servicios: [
+            services: [
                 {
                     id: 1,
                     name: "Corte de Cabello",
-                    precio: 15000
+                    price: 15000
                 },
                 {
                     id: 2,
                     name: "Limpieza de Cabello",
-                    precio: 20000
+                    price: 20000
                 },
                 {
                     id: 3,
                     name: "Pintura de Cabello",
-                    precio: 180000
+                    price: 180000
                 }
             ]
         }
@@ -48,25 +50,50 @@ export default function Reception() {
         </div>
     )
 
+    const paginatorLeft = <Button type="button" icon="pi pi-filter-slash" text />;
+    const paginatorRight = <Button type="button" icon="pi pi-refresh" text />;
+
+    const formatCurrency = (value) => {
+        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    };
+
+    const GetTotalPriceService = () => {
+        let total = 0
+
+        EXAMPLE_VALUES[0].services.forEach((s) => {
+            total += s.price
+        })
+
+        return formatCurrency(total)
+    }
+
+    const ExpandedTableFooter = (
+        <ColumnGroup>
+            <Row>
+                <Column footer={"Precio Total: " + GetTotalPriceService()} colSpan={2} footerStyle={{ textAlign: 'right' }} />
+            </Row>
+        </ColumnGroup>
+    );
+
     const ExpandedTableRowTemplate = (data) => {
         return (
             <div className="p-3">
                 <h5 className='mb-3'>Servicios de {data.name}</h5>
-                <DataTable value={data.servicios}>
+                <DataTable value={data.services} footerColumnGroup={ExpandedTableFooter}>
                     <Column field="name" header="Servicio"></Column>
-                    <Column field="precio" header="Precio"></Column>
+                    <Column field="price" header="Precio"></Column>
                 </DataTable>
             </div>
         );
     };
 
     const allowExpansion = (rowData) => {
-        return rowData.servicios.length > 0;
+        return rowData.services.length > 0;
     };
 
     return (
         <div>
-            <DataTable value={EXAMPLE_VALUES} header={TableHeader} paginator rows={25} rowsPerPageOptions={[25, 50, 100]} expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={ExpandedTableRowTemplate} showGridlines>
+            <DataTable value={EXAMPLE_VALUES} header={TableHeader} paginator rows={25} rowsPerPageOptions={[25, 50, 100]} expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={ExpandedTableRowTemplate} paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} showGridlines>
                 <Column expander={allowExpansion} style={{ width: '3rem' }} />
                 <Column field='name' header='Nombre Completo' sortable/>
                 <Column field='cc' header='Cedula' sortable/>
