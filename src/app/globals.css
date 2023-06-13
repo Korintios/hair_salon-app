@@ -162,3 +162,6 @@ body {
   width: 100%;
 }
 
+.p-dataview .p-dataview-header {
+  border-width: 1px 1px 1px 1px !important;
+}

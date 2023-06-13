@@ -1,9 +1,5 @@
-import Inventory from "../../components/Inventory"
+import Inventory from "@src/components/Inventory/Inventory";
 
 export default function index() {
-    return (
-        <>
-            <h1>Pagina de Inventario</h1>
-        </>
-    )
+	return <Inventory/>
 }
