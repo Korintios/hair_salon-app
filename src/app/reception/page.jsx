@@ -1,4 +1,4 @@
-import Reception from "@Source/components/Reception/Reception";
+import Reception from "@src/components/Reception/Reception";
 
 export default function page() {
     return (
