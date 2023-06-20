@@ -12,6 +12,7 @@
   "dependencies": {
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
+    "formik": "^2.4.2",
     "next": "13.4.4",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
