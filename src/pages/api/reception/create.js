@@ -40,7 +40,11 @@ export default async function handler(req, res) {
 
 			newReception.services = servicesList
 
-			return res.status(202).json({ message: "Create!", data: newReception})
+			return res.status(202).json({ message: "Create!", data: newReception}).header({
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+			})
 		}
 
 		throw new Error("This method not Allowed")
