@@ -21,7 +21,7 @@ export default function AddReceptionModal({
 	const handleSubmit = async (data) => {
 		try {
 			const response = await fetch(
-				"https://app-peluqueria-git-deploy-korintios.vercel.app//api/reception/create",
+				"https://app-peluqueria-rho.vercel.app/reception/api/reception/create",
 				{
 					body: JSON.stringify(data),
 					headers: {
