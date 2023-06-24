@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Reception {
+  receptionId Int @id @default(autoincrement())
+  clientName  String
+  clientCc    String
+  services    Service[] 
+  isPaid      Boolean @default(false)
+  dateCreated DateTime @default(now()) 
+}
+
+model Service {
+  reception   Reception @relation(fields: [receptionId], references: [receptionId], onDelete: Cascade)
+  receptionId Int
+  serviceId   Int    @id @default(autoincrement())
+  serviceName String
+  servicePrice Int
+  stylistName   String
+  serviceDate DateTime @default(now())
+}
+
+model Stylist {
+  stylistId   Int @id @default(autoincrement())
+  stylistName String
+}

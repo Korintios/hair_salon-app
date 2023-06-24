@@ -7,28 +7,86 @@ import { InputText } from "primereact/inputtext";
 import { PickList } from "primereact/picklist";
 import { useEffect, useState } from "react";
 
-export default function AddReceptionModal({isVisible = false, ChangeVisible}) {
+import { getFormErrorMessage } from '@utils/UtilForm'
+
+export default function AddReceptionModal({isVisible = false, ChangeVisible, data, setData}) {
+
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
 
+	const handleSubmit = async (data) => {
+		try {
+		  const response = await fetch('http://localhost:3000/api/reception/create', {
+			body: JSON.stringify(data),
+			headers: {
+			  'Content-Type': 'application/json'
+			},
+			method: 'POST'
+		  });
+	  
+		  if (response.ok) {
+			const jsonResponse = await response.json();
+			setData(prevData => [...prevData, jsonResponse.data]);
+		  } else {
+			// Manejar el caso de respuesta no exitosa según tus necesidades
+		  }
+		} catch (error) {
+		  console.log(error);
+		  // Manejar el error según tus necesidades
+		}
+	  };
+
+	const formik = useFormik({
+		initialValues: {
+			clientName: "",
+			clientCc: "",
+			services: target
+		},
+		validate: (data) => {
+			let errors = {};
+			const REQUIRED_MSG = "Este Campo es Obligatorio!";
+			const REQUIRED_SERVICES = "Debes Seleccionar Minimo un Servicio!"
+
+			if (!data.clientName) {
+				errors.clientName = REQUIRED_MSG;
+			}
+
+			if (!data.clientCc) {
+				errors.clientCc = REQUIRED_MSG;
+			}
+
+			if (target.length === 0) {
+				errors.services = REQUIRED_SERVICES
+			}
+
+			return errors;
+		},
+		onSubmit: (data) => {
+			const Service = {
+				clientName: formik.values.clientName,
+				clientCc: formik.values.clientCc,
+				services: target,
+			};
+
+			handleSubmit(Service)
+
+			formik.resetForm()
+			ChangeVisible(false)
+		},
+	});
+
+	const formikValues = formik.values;
+
 	const EXAMPLE_SERVICES = [
 		{
-			id: "1000",
-			name: "Corte de Pelo",
-			price: 65,
-			category: "Cabello",
+			serviceName: "Corte de Pelo",
+			servicePrice: 18000,
+			stylistName: "Juliana"
 		},
 		{
-			id: "1001",
-			name: "Limpieza de Cabello",
-			price: 72,
-			category: "Cabello",
-		},
-		{
-			id: "1002",
-			name: "Tintado de Cabello",
-			price: 79,
-			category: "Cabello",
+			serviceName: "Limpieza de Cabello",
+			servicePrice: 65000,
+			stylistName: "Josefina"
 		},
 	];
 
@@ -45,35 +103,16 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible}) {
 		return (
 			<div className="flex flex-wrap p-2 align-items-center gap-3">
 				<div className="flex-1 flex flex-column gap-2">
-					<span className="font-bold">{item.name}</span>
+					<span className="font-bold">{item.serviceName}</span>
 					<div className="flex align-items-center gap-2">
-						<i className="pi pi-tag text-sm"></i>
-						<span>{item.category}</span>
+						<i className="pi pi-user text-sm"></i>
+						<span>{item.stylistName}</span>
 					</div>
 				</div>
-				<span className="font-bold text-900">${item.price}</span>
+				<span className="font-bold text-900">${item.servicePrice}</span>
 			</div>
 		);
 	};
-
-	const formik = useFormik({
-		initialValues: {
-			clientName: "",
-			clientCc: "",
-			services: [],
-		},
-		onSubmit: (data) => {
-			const Service = {
-				clientName: formik.values.clientName,
-				clientCc: formik.values.clientCc,
-				services: target,
-				serviceDate: new Date(),
-			};
-			console.log(Service);
-		},
-	});
-
-	const formikValues = formik.values;
 
 	return (
 		<Dialog
@@ -92,6 +131,9 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible}) {
 									value={formikValues.clientName}
 									onChange={(e) => formik.setFieldValue("clientName", e.target.value)}
 								/>
+								<div>
+									{getFormErrorMessage(formik,'clientName')}
+								</div>
 							</div>
 							<div className="flex flex-auto flex-column gap-2">
 								<label>Identificacion de Cliente</label>
@@ -99,6 +141,9 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible}) {
 									value={formikValues.clientCc}
 									onChange={(e) => formik.setFieldValue("clientCc", e.target.value)}
 								/>
+								<div>
+									{getFormErrorMessage(formik,'clientCc')}
+								</div>
 							</div>
 						</div>
 						<div className="flex flex-column gap-2 mb-3">
@@ -118,6 +163,9 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible}) {
 								sourceFilterPlaceholder="Buscar por nombre..."
 								targetFilterPlaceholder="Buscar por nombre..."
 							/>
+							<div>
+								{getFormErrorMessage(formik,'services')}
+							</div>
 						</div>
 						<Button
 							label={"Generar Recepcion"}
