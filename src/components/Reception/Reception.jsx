@@ -93,7 +93,7 @@ export default function Reception({ TableData }) {
 	async function handleDelete(id) {
 		try {
 			await fetch(
-				"https://app-peluqueria-fag0m6ayr-korintios.vercel.app//api/reception/delete/" +
+				"https://app-peluqueria-git-deploy-korintios.vercel.app//api/reception/delete/" +
 					id,
 				{
 					method: "DELETE",
@@ -118,7 +118,7 @@ export default function Reception({ TableData }) {
 	async function handlePaid(id) {
 		try {
 			await fetch(
-				"https://app-peluqueria-fag0m6ayr-korintios.vercel.app//api/reception/paid/" +
+				"https://app-peluqueria-git-deploy-korintios.vercel.app//api/reception/paid/" +
 					id,
 				{
 					method: "PUT",
