@@ -7,45 +7,52 @@ import { InputText } from "primereact/inputtext";
 import { PickList } from "primereact/picklist";
 import { useEffect, useState } from "react";
 
-import { getFormErrorMessage } from '@utils/UtilForm'
+import { getFormErrorMessage } from "@utils/UtilForm";
 
-export default function AddReceptionModal({isVisible = false, ChangeVisible, data, setData}) {
-
+export default function AddReceptionModal({
+	isVisible = false,
+	ChangeVisible,
+	data,
+	setData,
+}) {
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
 
 	const handleSubmit = async (data) => {
 		try {
-		  const response = await fetch('http://localhost:3000/api/reception/create', {
-			body: JSON.stringify(data),
-			headers: {
-			  'Content-Type': 'application/json'
-			},
-			method: 'POST'
-		  });
-	  
-		  if (response.ok) {
-			const jsonResponse = await response.json();
-			setData(prevData => [...prevData, jsonResponse.data]);
-		  } else {
-			// Manejar el caso de respuesta no exitosa según tus necesidades
-		  }
+			const response = await fetch(
+				"https://app-peluqueria-fag0m6ayr-korintios.vercel.app//api/reception/create",
+				{
+					body: JSON.stringify(data),
+					headers: {
+						"Content-Type": "application/json",
+					},
+					method: "POST",
+				}
+			);
+
+			if (response.ok) {
+				const jsonResponse = await response.json();
+				setData((prevData) => [...prevData, jsonResponse.data]);
+			} else {
+				// Manejar el caso de respuesta no exitosa según tus necesidades
+			}
 		} catch (error) {
-		  console.log(error);
-		  // Manejar el error según tus necesidades
+			console.log(error);
+			// Manejar el error según tus necesidades
 		}
-	  };
+	};
 
 	const formik = useFormik({
 		initialValues: {
 			clientName: "",
 			clientCc: "",
-			services: target
+			services: target,
 		},
 		validate: (data) => {
 			let errors = {};
 			const REQUIRED_MSG = "Este Campo es Obligatorio!";
-			const REQUIRED_SERVICES = "Debes Seleccionar Minimo un Servicio!"
+			const REQUIRED_SERVICES = "Debes Seleccionar Minimo un Servicio!";
 
 			if (!data.clientName) {
 				errors.clientName = REQUIRED_MSG;
@@ -56,7 +63,7 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 			}
 
 			if (target.length === 0) {
-				errors.services = REQUIRED_SERVICES
+				errors.services = REQUIRED_SERVICES;
 			}
 
 			return errors;
@@ -68,10 +75,10 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 				services: target,
 			};
 
-			handleSubmit(Service)
+			handleSubmit(Service);
 
-			formik.resetForm()
-			ChangeVisible(false)
+			formik.resetForm();
+			ChangeVisible(false);
 		},
 	});
 
@@ -81,12 +88,12 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 		{
 			serviceName: "Corte de Pelo",
 			servicePrice: 18000,
-			stylistName: "Juliana"
+			stylistName: "Juliana",
 		},
 		{
 			serviceName: "Limpieza de Cabello",
 			servicePrice: 65000,
-			stylistName: "Josefina"
+			stylistName: "Josefina",
 		},
 	];
 
@@ -119,7 +126,9 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 			header={"Formulario de Servicio"}
 			visible={isVisible}
 			style={{ width: "60vw" }}
-			onHide={() => {ChangeVisible(false)}}
+			onHide={() => {
+				ChangeVisible(false);
+			}}
 		>
 			<form onSubmit={formik.handleSubmit}>
 				<div style={{ marginTop: 10 }}>
@@ -129,21 +138,21 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 								<label>Nombre de Cliente</label>
 								<InputText
 									value={formikValues.clientName}
-									onChange={(e) => formik.setFieldValue("clientName", e.target.value)}
+									onChange={(e) =>
+										formik.setFieldValue("clientName", e.target.value)
+									}
 								/>
-								<div>
-									{getFormErrorMessage(formik,'clientName')}
-								</div>
+								<div>{getFormErrorMessage(formik, "clientName")}</div>
 							</div>
 							<div className="flex flex-auto flex-column gap-2">
 								<label>Identificacion de Cliente</label>
 								<InputText
 									value={formikValues.clientCc}
-									onChange={(e) => formik.setFieldValue("clientCc", e.target.value)}
+									onChange={(e) =>
+										formik.setFieldValue("clientCc", e.target.value)
+									}
 								/>
-								<div>
-									{getFormErrorMessage(formik,'clientCc')}
-								</div>
+								<div>{getFormErrorMessage(formik, "clientCc")}</div>
 							</div>
 						</div>
 						<div className="flex flex-column gap-2 mb-3">
@@ -163,9 +172,7 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 								sourceFilterPlaceholder="Buscar por nombre..."
 								targetFilterPlaceholder="Buscar por nombre..."
 							/>
-							<div>
-								{getFormErrorMessage(formik,'services')}
-							</div>
+							<div>{getFormErrorMessage(formik, "services")}</div>
 						</div>
 						<Button
 							label={"Generar Recepcion"}
