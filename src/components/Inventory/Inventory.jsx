@@ -9,16 +9,47 @@ import AddItemModal from '@src/components/Inventory/AddItemModal'
 
 export default function Inventory({ dataInventory }) {
 
-    const [products, setProducts] = useState(dataInventory)
+    const [services, setServices] = useState(dataInventory)
     const [isActiveModal, setIsActiveModal] = useState(false)
 
-    const DataHeader = () => {
-        return (
-            <div className="flex justify-content-start">
-                <Button icon="pi pi-plus" label='Agregar Servicio' severity='success' onClick={() => setIsActiveModal(true)}></Button>
-            </div>
-        );
-    };
+    //! Functions on the Options Table
+	async function handleDelete(id) {
+		try {
+			await fetch('http://localhost:3000/api/inventory/delete/'+id, {
+			  method: 'DELETE'
+			}).then((res) => {
+				const filteredInventory = services.filter((inv) => inv.itemId !== id)
+				setServices(prevServices => filteredInventory)
+			}).catch((err) => {
+				console.log(err)
+			})
+		  } catch (error) {
+			console.log(error);
+			// Manejar el error según tus necesidades
+		}
+	}
+
+	async function handlePaid(id) {
+		try {
+			await fetch('http://localhost:3000/api/reception/paid/'+id, {
+			  method: 'PUT'
+			}).then((res) => {
+				console.log(res)
+				const updateReceptions = Receptions.map((reception) => {
+					if (reception.receptionId === id) {
+						reception.isPaid = true
+					}
+					return reception
+				})
+				setReceptions(prevReceptions => updateReceptions);
+			}).catch((err) => {
+				console.log(err)
+			})
+		  } catch (error) {
+			console.log(error);
+			// Manejar el error según tus necesidades
+		}
+	}
 
     const itemTemplate = (product) => {
         return (
@@ -42,7 +73,7 @@ export default function Inventory({ dataInventory }) {
                             <span className="text-2xl font-semibold">${product.itemPrice}</span>
                             <div className="flex gap-2">
                                 <Button icon="pi pi-pencil" className="p-button-rounded" />
-                                <Button icon="pi pi-trash" className="p-button-rounded" severity='danger'/>
+                                <Button icon="pi pi-trash" className="p-button-rounded" severity='danger' onClick={() => handleDelete(product.itemId)}/>
                             </div>
                         </div>
                     </div>
@@ -53,8 +84,9 @@ export default function Inventory({ dataInventory }) {
 
     return (
         <div className="card">
-            <AddItemModal isVisible={isActiveModal} ChangeVisible={setIsActiveModal} setData={setProducts}/>
-            <DataView value={products} itemTemplate={itemTemplate} header={DataHeader()}/>
+            <AddItemModal isVisible={isActiveModal} ChangeVisible={setIsActiveModal} setData={setServices}/>
+            <Button icon="pi pi-plus" label='Agregar Servicio' severity='success' onClick={() => setIsActiveModal(true)}></Button>
+            <DataView value={services} itemTemplate={itemTemplate}/>
         </div>
     )
 }
