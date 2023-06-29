@@ -8,10 +8,12 @@ export default async function page() {
                 services: true
             }
         })
+    
+    const dataInventory = await prisma.inventory.findMany()
 
     return (
         <>
-            <Reception TableData={receptionsData} />
+            <Reception TableData={receptionsData} dataInventory={dataInventory} />
         </>
     );
 }

@@ -12,7 +12,7 @@ import { TableHeader } from "../TableHeader";
 import { Tag } from "primereact/tag";
 import { InputText } from "primereact/inputtext";
 
-export default function Reception({ TableData }) {
+export default function Reception({ TableData, dataInventory }) {
 
 	//! Variables of the Component
 	const [isModalVisible, ChangeModalVisible] = useState(false);
@@ -140,6 +140,7 @@ export default function Reception({ TableData }) {
 				ChangeVisible={() => ChangeModalVisible()}
 				data={Receptions}
 				setData={setReceptions}
+				dataServices={dataInventory}
 			/>
 			<Button
 				icon="pi pi-plus"

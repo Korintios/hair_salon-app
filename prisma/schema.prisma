@@ -33,3 +33,11 @@ model Stylist {
   stylistId   Int @id @default(autoincrement())
   stylistName String
 }
+
+model Inventory {
+  itemId Int @id @default(autoincrement())
+  itemName String
+  itemPrice Int
+  itemTag String
+  isActive Boolean @default(true)
+}

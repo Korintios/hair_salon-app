@@ -9,10 +9,14 @@ import { useEffect, useState } from "react";
 
 import { getFormErrorMessage } from '@utils/UtilForm'
 
-export default function AddReceptionModal({isVisible = false, ChangeVisible, data, setData}) {
+export default function AddReceptionModal({isVisible = false, ChangeVisible, data, setData, dataServices}) {
 
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
+
+	useEffect(() => {
+		setSource(prevData => dataServices)
+	}, [])
 
 	const handleSubmit = async (data) => {
 		try {
@@ -67,32 +71,13 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 				clientCc: formik.values.clientCc,
 				services: target,
 			};
-
 			handleSubmit(Service)
-
 			formik.resetForm()
 			ChangeVisible(false)
 		},
 	});
 
 	const formikValues = formik.values;
-
-	const EXAMPLE_SERVICES = [
-		{
-			serviceName: "Corte de Pelo",
-			servicePrice: 18000,
-			stylistName: "Juliana"
-		},
-		{
-			serviceName: "Limpieza de Cabello",
-			servicePrice: 65000,
-			stylistName: "Josefina"
-		},
-	];
-
-	useEffect(() => {
-		setSource(EXAMPLE_SERVICES);
-	}, []);
 
 	const onChange = (event) => {
 		setSource(event.source);
@@ -103,13 +88,13 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 		return (
 			<div className="flex flex-wrap p-2 align-items-center gap-3">
 				<div className="flex-1 flex flex-column gap-2">
-					<span className="font-bold">{item.serviceName}</span>
+					<span className="font-bold">{item.itemName}</span>
 					<div className="flex align-items-center gap-2">
-						<i className="pi pi-user text-sm"></i>
-						<span>{item.stylistName}</span>
+						<i className="pi pi-tag text-sm"></i>
+						<span>{item.itemTag}</span>
 					</div>
 				</div>
-				<span className="font-bold text-900">${item.servicePrice}</span>
+				<span className="font-bold text-900">${item.itemPrice}</span>
 			</div>
 		);
 	};
@@ -124,7 +109,7 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 			<form onSubmit={formik.handleSubmit}>
 				<div style={{ marginTop: 10 }}>
 					<span className="card">
-						<div className="flex justify-content-between mb-3 gap-3">
+						<div className="flex justify-content-between gap-3">
 							<div className="flex flex-auto flex-column gap-2">
 								<label>Nombre de Cliente</label>
 								<InputText

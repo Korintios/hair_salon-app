@@ -27,9 +27,9 @@ export default async function handler(req, res) {
 				const newService = await prisma.service.create({
 				  data: {
 					receptionId: newReception.receptionId,
-					serviceName: service.serviceName,
-					servicePrice: service.servicePrice,
-					stylistName: service.stylistName,
+					serviceName: service.itemName,
+					servicePrice: service.itemPrice,
+					stylistName: service.itemName,
 				  },
 				});
 		  
