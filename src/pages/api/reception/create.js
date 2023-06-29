@@ -36,8 +36,6 @@ export default async function handler(req, res) {
 				servicesList.push(newService)
 			}
 
-			console.log(servicesList)
-
 			newReception.services = servicesList
 
 			return res.status(202).json({ message: "Create!", data: newReception})

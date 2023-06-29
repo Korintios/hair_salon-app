@@ -15,11 +15,16 @@ export default async function handler(req, res) {
 				throw new Error("The Item Tag is Undefined or Null");
 			}
 
+			if (req.body.stylistManager == undefined) {
+				throw new Error("The Stylist Manager is Undefined or Null");
+			}
+
 			const newItem = await prisma.inventory.create({
                 data: {
 					itemName: req.body.itemName,
 					itemPrice: parseInt(req.body.itemPrice),
 					itemTag: req.body.itemTag,
+					stylistManager: req.body.stylistManager
 				},
             })
 

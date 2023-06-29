@@ -11,6 +11,7 @@ import { GetTotalPriceService } from "@src/helpers/PriceHelper";
 import { TableHeader } from "../TableHeader";
 import { Tag } from "primereact/tag";
 import { InputText } from "primereact/inputtext";
+import { useAPI } from "@src/service/useAPI";
 
 export default function Reception({ TableData, dataInventory }) {
 
@@ -80,43 +81,25 @@ export default function Reception({ TableData, dataInventory }) {
 	}
 
 	//! Functions on the Options Table
-	async function handleDelete(id) {
-		try {
-			await fetch('http://localhost:3000/api/reception/delete/'+id, {
-			  method: 'DELETE'
-			}).then((res) => {
-				console.log(res)
-				const filteredReceptions = Receptions.filter((reception) => reception.receptionId !== id)
-				setReceptions(prevReceptions => filteredReceptions);
-			}).catch((err) => {
-				console.log(err)
-			})
-		  } catch (error) {
-			console.log(error);
-			// Manejar el error según tus necesidades
-		}
+	function handleDelete(id) {
+		// eslint-disable-next-line
+		useAPI('DELETE',null,'reception','delete',id, (error,data) => {
+			const filteredReceptions = Receptions.filter((reception) => reception.receptionId !== id)
+			setReceptions(prevReceptions => filteredReceptions);
+		})
 	}
 
-	async function handlePaid(id) {
-		try {
-			await fetch('http://localhost:3000/api/reception/paid/'+id, {
-			  method: 'PUT'
-			}).then((res) => {
-				console.log(res)
-				const updateReceptions = Receptions.map((reception) => {
-					if (reception.receptionId === id) {
-						reception.isPaid = true
-					}
-					return reception
-				})
-				setReceptions(prevReceptions => updateReceptions);
-			}).catch((err) => {
-				console.log(err)
+	function handlePaid(id) {
+		// eslint-disable-next-line
+		useAPI('PUT',null,'reception','paid',id,(error,data) => {
+			const updateReceptions = Receptions.map((reception) => {
+				if (reception.receptionId === id) {
+					reception.isPaid = true
+				}
+				return reception
 			})
-		  } catch (error) {
-			console.log(error);
-			// Manejar el error según tus necesidades
-		}
+			setReceptions(prevReceptions => updateReceptions);
+		})
 	}
 
 	//! Table Buttons and Options

@@ -29,44 +29,27 @@ export default function Inventory({ dataInventory }) {
 		}
 	}
 
-	async function handlePaid(id) {
-		try {
-			await fetch('http://localhost:3000/api/reception/paid/'+id, {
-			  method: 'PUT'
-			}).then((res) => {
-				console.log(res)
-				const updateReceptions = Receptions.map((reception) => {
-					if (reception.receptionId === id) {
-						reception.isPaid = true
-					}
-					return reception
-				})
-				setReceptions(prevReceptions => updateReceptions);
-			}).catch((err) => {
-				console.log(err)
-			})
-		  } catch (error) {
-			console.log(error);
-			// Manejar el error según tus necesidades
-		}
-	}
-
     const itemTemplate = (product) => {
         return (
             <div className="col-12">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                        <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-                            <div className="text-2xl font-bold text-900">{product.itemName}</div>
+                        <div className="flex flex-column justify-content-center align-items-center sm:align-items-start gap-2 h-full">
+                            <div className="flex align-items-center gap-2 text-2xl font-bold text-900">
+                                {product.itemName}                                 
+                                <Tag 
+                                    value={product.isActive ? 'Disponible' : 'Sin Servicio'} 
+                                    severity={product.isActive ? 'success' : 'danger'}
+                                ></Tag></div>
                             <div className="flex align-items-center gap-3">
+                                <span className="flex align-items-center gap-2">
+                                    <i className="pi pi-user"></i>
+                                    <span className="font-semibold">{product.stylistManager}</span>
+                                </span>
                                 <span className="flex align-items-center gap-2">
                                     <i className="pi pi-tag"></i>
                                     <span className="font-semibold">{product.itemTag}</span>
                                 </span>
-                                <Tag 
-                                    value={product.isActive ? 'Disponible' : 'Sin Servicio'} 
-                                    severity={product.isActive ? 'success' : 'danger'}
-                                ></Tag>
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
@@ -85,7 +68,7 @@ export default function Inventory({ dataInventory }) {
     return (
         <div className="card">
             <AddItemModal isVisible={isActiveModal} ChangeVisible={setIsActiveModal} setData={setServices}/>
-            <Button icon="pi pi-plus" label='Agregar Servicio' severity='success' onClick={() => setIsActiveModal(true)}></Button>
+            <Button className='mb-2' icon="pi pi-plus" label='Agregar Servicio' severity='success' onClick={() => setIsActiveModal(true)}></Button>
             <DataView value={services} itemTemplate={itemTemplate}/>
         </div>
     )

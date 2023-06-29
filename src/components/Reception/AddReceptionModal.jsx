@@ -8,37 +8,16 @@ import { PickList } from "primereact/picklist";
 import { useEffect, useState } from "react";
 
 import { getFormErrorMessage } from '@utils/UtilForm'
+import { useAPI } from "@src/service/useAPI";
 
-export default function AddReceptionModal({isVisible = false, ChangeVisible, data, setData, dataServices}) {
+export default function AddReceptionModal({isVisible = false, ChangeVisible, setData, dataServices}) {
 
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
 
 	useEffect(() => {
 		setSource(prevData => dataServices)
-	}, [])
-
-	const handleSubmit = async (data) => {
-		try {
-		  const response = await fetch('http://localhost:3000/api/reception/create', {
-			body: JSON.stringify(data),
-			headers: {
-			  'Content-Type': 'application/json'
-			},
-			method: 'POST'
-		  });
-	  
-		  if (response.ok) {
-			const jsonResponse = await response.json();
-			setData(prevData => [...prevData, jsonResponse.data]);
-		  } else {
-			// Manejar el caso de respuesta no exitosa según tus necesidades
-		  }
-		} catch (error) {
-		  console.log(error);
-		  // Manejar el error según tus necesidades
-		}
-	  };
+	}, [dataServices])
 
 	const formik = useFormik({
 		initialValues: {
@@ -65,15 +44,14 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, dat
 
 			return errors;
 		},
-		onSubmit: (data) => {
-			const Service = {
-				clientName: formik.values.clientName,
-				clientCc: formik.values.clientCc,
-				services: target,
-			};
-			handleSubmit(Service)
-			formik.resetForm()
-			ChangeVisible(false)
+		onSubmit: (dataSubmit) => {
+			dataSubmit.services = target
+			// eslint-disable-next-line 
+			useAPI('POST',dataSubmit,'reception','create',0, (error,data) => {
+				setData(prevData => [...prevData, data.data])
+				formik.resetForm()
+				ChangeVisible(false)
+			})
 		},
 	});
 

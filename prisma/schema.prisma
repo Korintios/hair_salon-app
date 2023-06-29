@@ -39,5 +39,6 @@ model Inventory {
   itemName String
   itemPrice Int
   itemTag String
+  stylistManager String
   isActive Boolean @default(true)
 }
