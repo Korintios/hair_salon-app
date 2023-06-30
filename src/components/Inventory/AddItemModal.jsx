@@ -7,8 +7,9 @@ import { InputText } from "primereact/inputtext";
 
 import { getFormErrorMessage } from '@utils/UtilForm'
 import { useAPI } from '@service/useAPI'
+import { useEffect } from "react";
 
-export default function AddItemModal({isVisible = false, ChangeVisible, data, setData}) {
+export default function AddItemModal({isVisible = false, ChangeVisible, data, setData, isUpdate, setIsUpdate, dataUpdate}) {
 
 	const formik = useFormik({
 		initialValues: {
@@ -40,20 +41,55 @@ export default function AddItemModal({isVisible = false, ChangeVisible, data, se
 			return errors;
 		},
 		onSubmit: (dataSubmit) => {
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			useAPI('POST', dataSubmit, 'inventory', 'create', 0, (error,data) => {
-				setData(prevData => [...prevData, data.data]);
-				formik.resetForm()
-				ChangeVisible(false)
+
+			if (isUpdate) {
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useAPI('PUT', dataSubmit, 'inventory', 'update', dataUpdate.itemId, (error,data) => {
+					console.log(data)
+					setData(prevData => prevData.map((d) => {
+						if (d.itemId === dataUpdate.itemId) {
+						  return {
+							...d,
+							itemName: data.data.itemName,
+							itemPrice: data.data.itemPrice,
+							itemTag: data.data.itemTag,
+							stylistManager: data.data.stylistManager
+						  };
+						}
+						return d;
+					  }));
+					formik.resetForm()
+					ChangeVisible(false)
+					setIsUpdate(false)
 			})
+			} else {
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useAPI('POST', dataSubmit, 'inventory', 'create', 0, (error,data) => {
+					setData(prevData => [...prevData, data.data]);
+					formik.resetForm()
+					ChangeVisible(false)
+				})
+			}
 		},
 	});
 
 	const formikValues = formik.values;
 
+	useEffect(() => {
+		if (isUpdate) {
+			formik.setFieldValue('itemName', dataUpdate.itemName)
+			formik.setFieldValue('itemPrice', dataUpdate.itemPrice)
+			formik.setFieldValue('itemTag', dataUpdate.itemTag)
+			formik.setFieldValue('stylistManager', dataUpdate.stylistManager)
+		} else {
+			formik.resetForm()
+			setIsUpdate(false)
+		}
+	}, [dataUpdate])
+
 	return (
 		<Dialog
-			header={"Formulario de Servicio"}
+			header={isUpdate ? "Actualizar Servicio" : "Formulario de Servicio"}
 			visible={isVisible}
 			style={{ width: "25vw" }}
 			onHide={() => {ChangeVisible(false)}}
@@ -115,7 +151,7 @@ export default function AddItemModal({isVisible = false, ChangeVisible, data, se
                             </div>
                         </div>
 						<Button
-							label={"Registrar Servicio"}
+							label={isUpdate ? "Actualizar Servicio" : "Registrar Servicio"}
 							type="submit"
 							className="w-full mt-3"
 						/>
