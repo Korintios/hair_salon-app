@@ -8,21 +8,35 @@ import { Button } from "primereact/button";
 import { useEffect, useState } from "react";
 import AddReceptionModal from "./AddReceptionModal";
 import { GetTotalPriceService } from "@src/helpers/PriceHelper";
-import { TableHeader } from "../TableHeader";
 import { Tag } from "primereact/tag";
 import { InputText } from "primereact/inputtext";
+
 import { useAPI } from "@src/service/useAPI";
 
-export default function Reception({ TableData, dataInventory }) {
+export default function Reception() {
 
 	//! Variables of the Component
 	const [isModalVisible, ChangeModalVisible] = useState(false);
 	const [globalFilterValue, setGlobalFilterValue] = useState("");
 	const [expandedRows, setExpandedRows] = useState(null);
 	const [Receptions, setReceptions] = useState([])
+	const [Services, setServices] = useState([])
+
+	//! Init Function
+	const getData = async() => {
+		// eslint-disable-next-line
+		useAPI('GET',null,'inventory','get',null, (error,data) => {
+			setServices(prevData => data.data)
+		})
+
+		// eslint-disable-next-line
+		useAPI('GET',null,'reception','get',null, (error,data) => {
+			setReceptions(prevData => data.data)
+		})
+	}
 
 	useEffect(() => {
-		setReceptions(TableData)
+		getData()
 	}, [])
 
 	//! Table Header
@@ -123,7 +137,7 @@ export default function Reception({ TableData, dataInventory }) {
 				ChangeVisible={() => ChangeModalVisible()}
 				data={Receptions}
 				setData={setReceptions}
-				dataServices={dataInventory}
+				dataServices={Services}
 			/>
 			<Button
 				icon="pi pi-plus"

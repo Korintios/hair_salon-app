@@ -3,15 +3,27 @@
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import { DataView } from "primereact/dataview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AddItemModal from "@src/components/Inventory/AddItemModal";
+import { useAPI } from "@service/useAPI"
 
-export default function Inventory({ dataInventory }) {
-	const [services, setServices] = useState(dataInventory);
+export default function Inventory() {
+	const [services, setServices] = useState([]);
 	const [isActiveModal, setIsActiveModal] = useState(false);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [dataUpdate, setDataUpdate] = useState([]);
+
+    const getInventory = async() => {
+        // eslint-disable-next-line
+        useAPI('GET',null,'inventory','get',null, (error,data) => {
+            setServices(prevData => data.data)
+        })
+    }
+
+    useEffect(() => {
+        getInventory()
+    }, [])
 
 	//! Functions on the Options Table
 	async function handleDelete(id) {

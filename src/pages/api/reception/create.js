@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 					receptionId: newReception.receptionId,
 					serviceName: service.itemName,
 					servicePrice: service.itemPrice,
-					stylistName: service.itemName,
+					stylistName: service.stylistManager,
 				  },
 				});
 		  

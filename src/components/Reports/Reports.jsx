@@ -13,8 +13,9 @@ import { InputText } from "primereact/inputtext";
 
 import { formatPrice } from "@src/helpers/PriceHelper";
 import { formatDate } from "@helpers/DateHelper"
+import { useAPI } from "@service/useAPI"
 
-export default function Reports({ ReportsData }) {
+export default function Reports() {
 
 	const [Reports, setReports] = useState([])
 	const [Stylists, setStylists] = useState([])
@@ -24,8 +25,28 @@ export default function Reports({ ReportsData }) {
     });
 	const [filteredReports, setFilteredReports] = useState([])
 	const [totalPaid, setTotalPaid] = useState(formatPrice(0))
-
 	const exportColumns = filteredReports.map((col) => ({ Estilista: col.stylistName, Precio: col.servicePrice, Fecha: col.serviceDate }));
+
+	//! Init Function
+	const getReports = async() => {
+		// eslint-disable-next-line
+		useAPI('GET',null,'service','get',null, (error,data) => {
+			setReports(prevData => data.data.map((e) => {
+				e.serviceDate = new Date(e.serviceDate);
+				return e;
+			}))
+
+			let arrayUniques = new Set()
+			data.data.forEach((r) => {
+				arrayUniques.add(r.stylistName)
+			})
+			setStylists(Array.from(arrayUniques))
+		})
+	}
+
+	useEffect(() => {
+		getReports()
+	}, [])
 
 	const exportPdf = () => {
         import('jspdf').then((jsPDF) => {
@@ -81,22 +102,6 @@ export default function Reports({ ReportsData }) {
             }
         });
     };
-
-	const getStylists = () => {
-
-		let arrayUniques = new Set()
-
-		ReportsData.forEach((r) => {
-			arrayUniques.add(r.stylistName)
-		})
-
-		return Array.from(arrayUniques)
-	}
-
-	useEffect(() => {
-		setReports(ReportsData)
-		setStylists(getStylists)
-	}, [ReportsData])
 
 	const TableHeader = () => {
 		return (
@@ -178,6 +183,8 @@ export default function Reports({ ReportsData }) {
 					setFilteredReports(prevData => filteredData)
 				}}
 				value={Reports}
+				dataKey="serviceId"
+				id="serviceId"
 				groupRowsBy="stylistName"
 				paginator
 				rows={10}

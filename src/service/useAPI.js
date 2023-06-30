@@ -13,7 +13,7 @@ export const useAPI = async (method = "GET", data = null, section, action, id, c
     let finalUrl
 
 	try {
-		if (section === "reception" || section === "inventory") {
+		if (section === "reception" || section === "inventory" || section === "service") {
 			if (method === "POST" || method === "PUT" || method === "DELETE") {
 
                 finalUrl = BASE_URL.concat(section, "/", action)
@@ -38,6 +38,8 @@ export const useAPI = async (method = "GET", data = null, section, action, id, c
                 if (method === "PUT" || method === "DELETE") {
                     finalUrl = BASE_URL.concat(section, '/', action, '/', id)
                 }
+			} else {
+				finalUrl = BASE_URL.concat(section, "/", action)
 			}
 
 			await fetch(finalUrl, RequestInit).then(
