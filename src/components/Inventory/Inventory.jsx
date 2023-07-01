@@ -3,16 +3,17 @@
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import { DataView } from "primereact/dataview";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import AddItemModal from "@src/components/Inventory/AddItemModal";
 import { useAPI } from "@service/useAPI"
+import { modalContext } from "@context/modalContextProvider";
 
 export default function Inventory() {
 	const [services, setServices] = useState([]);
-	const [isActiveModal, setIsActiveModal] = useState(false);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [dataUpdate, setDataUpdate] = useState([]);
+	const { isActiveModal, toggleActiveModal} = useContext(modalContext)
 
     const getInventory = async() => {
         // eslint-disable-next-line
@@ -100,22 +101,24 @@ export default function Inventory() {
 
 	return (
 		<div className="card">
-			<AddItemModal
-				isVisible={isActiveModal}
-				ChangeVisible={setIsActiveModal}
-				setData={setServices}
-				isUpdate={isUpdate}
-                setIsUpdate={setIsUpdate}
-				dataUpdate={dataUpdate}
-			/>
-			<Button
-				className="mb-2"
-				icon="pi pi-plus"
-				label="Agregar Servicio"
-				severity="success"
-				onClick={() => setIsActiveModal(true)}
-			/>
-			<DataView value={services} itemTemplate={itemTemplate}/>
-		</div>
+		<AddItemModal
+			isVisible={isActiveModal}
+			setData={setServices}
+			isUpdate={isUpdate}
+			setIsUpdate={setIsUpdate}
+			dataUpdate={dataUpdate}
+		/>
+		<Button
+			className="mb-2"
+			icon="pi pi-plus"
+			label="Agregar Servicio"
+			severity="success"
+			onClick={() => {
+				toggleActiveModal()
+				console.log(isActiveModal)
+			}}
+		/>
+		<DataView value={services} itemTemplate={itemTemplate}/>
+	</div>
 	);
 }

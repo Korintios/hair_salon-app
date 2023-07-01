@@ -5,22 +5,23 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AddReceptionModal from "./AddReceptionModal";
 import { GetTotalPriceService } from "@src/helpers/PriceHelper";
 import { Tag } from "primereact/tag";
 import { InputText } from "primereact/inputtext";
 
 import { useAPI } from "@src/service/useAPI";
+import { modalContext } from "@context/modalContextProvider";
 
 export default function Reception() {
 
 	//! Variables of the Component
-	const [isModalVisible, ChangeModalVisible] = useState(false);
 	const [globalFilterValue, setGlobalFilterValue] = useState("");
 	const [expandedRows, setExpandedRows] = useState(null);
 	const [Receptions, setReceptions] = useState([])
 	const [Services, setServices] = useState([])
+	const { isActiveModal, toggleActiveModal} = useContext(modalContext)
 
 	//! Init Function
 	const getData = async() => {
@@ -133,8 +134,6 @@ export default function Reception() {
 	return (
 		<div>
 			<AddReceptionModal
-				isVisible={isModalVisible}
-				ChangeVisible={() => ChangeModalVisible()}
 				data={Receptions}
 				setData={setReceptions}
 				dataServices={Services}
@@ -144,7 +143,7 @@ export default function Reception() {
 				severity="success"
 				label="Registrar Servicio"
 				className="mb-3"
-				onClick={() => ChangeModalVisible(true)}
+				onClick={() => toggleActiveModal()}
 			/>
 			<DataTable
 				value={Receptions}

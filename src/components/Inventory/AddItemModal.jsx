@@ -7,9 +7,12 @@ import { InputText } from "primereact/inputtext";
 
 import { getFormErrorMessage } from '@utils/UtilForm'
 import { useAPI } from '@service/useAPI'
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { modalContext } from "@context/modalContextProvider";
 
-export default function AddItemModal({isVisible = false, ChangeVisible, data, setData, isUpdate, setIsUpdate, dataUpdate}) {
+export default function AddItemModal({ data, setData, isUpdate, setIsUpdate, dataUpdate}) {
+
+	const { isActiveModal, toggleActiveModal } = useContext(modalContext)
 
 	const formik = useFormik({
 		initialValues: {
@@ -59,7 +62,7 @@ export default function AddItemModal({isVisible = false, ChangeVisible, data, se
 						return d;
 					  }));
 					formik.resetForm()
-					ChangeVisible(false)
+					toggleActiveModal()
 					setIsUpdate(false)
 			})
 			} else {
@@ -67,7 +70,7 @@ export default function AddItemModal({isVisible = false, ChangeVisible, data, se
 				useAPI('POST', dataSubmit, 'inventory', 'create', 0, (error,data) => {
 					setData(prevData => [...prevData, data.data]);
 					formik.resetForm()
-					ChangeVisible(false)
+					toggleActiveModal()
 				})
 			}
 		},
@@ -90,9 +93,9 @@ export default function AddItemModal({isVisible = false, ChangeVisible, data, se
 	return (
 		<Dialog
 			header={isUpdate ? "Actualizar Servicio" : "Formulario de Servicio"}
-			visible={isVisible}
+			visible={isActiveModal}
 			style={{ width: "25vw" }}
-			onHide={() => {ChangeVisible(false)}}
+			onHide={() => toggleActiveModal()}
 		>
 			<form onSubmit={formik.handleSubmit}>
 				<div className="mt-10 flex flex-column">

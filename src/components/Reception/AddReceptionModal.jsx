@@ -5,15 +5,18 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { PickList } from "primereact/picklist";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { getFormErrorMessage } from '@utils/UtilForm'
 import { useAPI } from "@src/service/useAPI";
+import { modalContext } from "@context/modalContextProvider";
 
-export default function AddReceptionModal({isVisible = false, ChangeVisible, setData, dataServices}) {
+export default function AddReceptionModal({setData, dataServices}) {
 
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
+
+	const { isActiveModal, toggleActiveModal} = useContext(modalContext)
 
 	useEffect(() => {
 		setSource(prevData => dataServices)
@@ -50,7 +53,7 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, set
 			useAPI('POST',dataSubmit,'reception','create',0, (error,data) => {
 				setData(prevData => [...prevData, data.data])
 				formik.resetForm()
-				ChangeVisible(false)
+				toggleActiveModal()
 			})
 		},
 	});
@@ -80,9 +83,9 @@ export default function AddReceptionModal({isVisible = false, ChangeVisible, set
 	return (
 		<Dialog
 			header={"Formulario de Servicio"}
-			visible={isVisible}
+			visible={isActiveModal}
 			style={{ width: "60vw" }}
-			onHide={() => {ChangeVisible(false)}}
+			onHide={() => {toggleActiveModal()}}
 		>
 			<form onSubmit={formik.handleSubmit}>
 				<div style={{ marginTop: 10 }}>
