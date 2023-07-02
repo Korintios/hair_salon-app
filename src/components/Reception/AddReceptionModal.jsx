@@ -10,17 +10,20 @@ import { useContext, useEffect, useState } from "react";
 import { getFormErrorMessage } from '@utils/UtilForm'
 import { useAPI } from "@src/service/useAPI";
 import { modalContext } from "@context/modalContextProvider";
+import { useDynamicValues } from "@hooks/useDynamicValues";
 
-export default function AddReceptionModal({setData, dataServices}) {
+import { itemTemplate } from "@src/components/Reception/Template/ItemTemplate"
+
+export default function AddReceptionModal({setReceptions}) {
 
 	const [source, setSource] = useState([]);
 	const [target, setTarget] = useState([]);
-
-	const { isActiveModal, toggleActiveModal} = useContext(modalContext)
+	const { isActiveModal, toggleActiveModal } = useContext(modalContext)
+	const { data: inventory } = useDynamicValues('inventory')
 
 	useEffect(() => {
-		setSource(prevData => dataServices)
-	}, [dataServices])
+		setSource(prevData => inventory)
+	}, [inventory])
 
 	const formik = useFormik({
 		initialValues: {
@@ -51,7 +54,7 @@ export default function AddReceptionModal({setData, dataServices}) {
 			dataSubmit.services = target
 			// eslint-disable-next-line 
 			useAPI('POST',dataSubmit,'reception','create',0, (error,data) => {
-				setData(prevData => [...prevData, data.data])
+				setReceptions(prevData => [...prevData, data.data])
 				formik.resetForm()
 				toggleActiveModal()
 			})
@@ -63,21 +66,6 @@ export default function AddReceptionModal({setData, dataServices}) {
 	const onChange = (event) => {
 		setSource(event.source);
 		setTarget(event.target);
-	};
-
-	const itemTemplate = (item) => {
-		return (
-			<div className="flex flex-wrap p-2 align-items-center gap-3">
-				<div className="flex-1 flex flex-column gap-2">
-					<span className="font-bold">{item.itemName}</span>
-					<div className="flex align-items-center gap-2">
-						<i className="pi pi-tag text-sm"></i>
-						<span>{item.itemTag}</span>
-					</div>
-				</div>
-				<span className="font-bold text-900">${item.itemPrice}</span>
-			</div>
-		);
 	};
 
 	return (
@@ -137,7 +125,7 @@ export default function AddReceptionModal({setData, dataServices}) {
 							label={"Generar Recepcion"}
 							type="submit"
 							icon="pi pi-"
-							style={{ width: "100%" }}
+							className="w-full"
 						/>
 					</span>
 				</div>

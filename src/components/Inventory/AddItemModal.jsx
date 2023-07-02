@@ -10,7 +10,7 @@ import { useAPI } from '@service/useAPI'
 import { useContext, useEffect } from "react";
 import { modalContext } from "@context/modalContextProvider";
 
-export default function AddItemModal({ data, setData, isUpdate, setIsUpdate, dataUpdate}) {
+export default function AddItemModal({ setItems, isUpdate, setIsUpdate, dataUpdate}) {
 
 	const { isActiveModal, toggleActiveModal } = useContext(modalContext)
 
@@ -48,8 +48,7 @@ export default function AddItemModal({ data, setData, isUpdate, setIsUpdate, dat
 			if (isUpdate) {
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useAPI('PUT', dataSubmit, 'inventory', 'update', dataUpdate.itemId, (error,data) => {
-					console.log(data)
-					setData(prevData => prevData.map((d) => {
+					setItems(prevData => prevData.map((d) => {
 						if (d.itemId === dataUpdate.itemId) {
 						  return {
 							...d,
@@ -68,7 +67,7 @@ export default function AddItemModal({ data, setData, isUpdate, setIsUpdate, dat
 			} else {
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useAPI('POST', dataSubmit, 'inventory', 'create', 0, (error,data) => {
-					setData(prevData => [...prevData, data.data]);
+					setItems(prevData => [...prevData, data.data]);
 					formik.resetForm()
 					toggleActiveModal()
 				})

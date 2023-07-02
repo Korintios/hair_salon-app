@@ -3,46 +3,26 @@
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import { DataView } from "primereact/dataview";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import AddItemModal from "@src/components/Inventory/AddItemModal";
 import { useAPI } from "@service/useAPI"
 import { modalContext } from "@context/modalContextProvider";
+import { useDynamicValues } from "@hooks/useDynamicValues";
 
 export default function Inventory() {
-	const [services, setServices] = useState([]);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [dataUpdate, setDataUpdate] = useState([]);
+	const { data: items, setData: setItems } = useDynamicValues('inventory')
 	const { isActiveModal, toggleActiveModal} = useContext(modalContext)
-
-    const getInventory = async() => {
-        // eslint-disable-next-line
-        useAPI('GET',null,'inventory','get',null, (error,data) => {
-            setServices(prevData => data.data)
-        })
-    }
-
-    useEffect(() => {
-        getInventory()
-    }, [])
 
 	//! Functions on the Options Table
 	async function handleDelete(id) {
-		try {
-			await fetch("http://localhost:3000/api/inventory/delete/" + id, {
-				method: "DELETE",
-			})
-				.then((res) => {
-					const filteredInventory = services.filter((inv) => inv.itemId !== id);
-					setServices((prevServices) => filteredInventory);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		} catch (error) {
-			console.log(error);
-			// Manejar el error según tus necesidades
-		}
+		// eslint-disable-next-line
+		useAPI('DELETE',null,'inventory','delete',id, (error,data) => {
+			const filteredInventory = items.filter((inv) => inv.itemId !== id);
+			setItems((prevItems) => filteredInventory);
+		})
 	}
 
 	const itemTemplate = (product) => {
@@ -82,7 +62,7 @@ export default function Inventory() {
 									onClick={() => {
 										setIsUpdate(true);
 										setDataUpdate(product);
-										setIsActiveModal(true);
+										toggleActiveModal();
 									}}
 								/>
 								<Button
@@ -102,8 +82,7 @@ export default function Inventory() {
 	return (
 		<div className="card">
 		<AddItemModal
-			isVisible={isActiveModal}
-			setData={setServices}
+			setItems={setItems}
 			isUpdate={isUpdate}
 			setIsUpdate={setIsUpdate}
 			dataUpdate={dataUpdate}
@@ -113,12 +92,9 @@ export default function Inventory() {
 			icon="pi pi-plus"
 			label="Agregar Servicio"
 			severity="success"
-			onClick={() => {
-				toggleActiveModal()
-				console.log(isActiveModal)
-			}}
+			onClick={() => toggleActiveModal()}
 		/>
-		<DataView value={services} itemTemplate={itemTemplate}/>
+		<DataView value={items} itemTemplate={itemTemplate}/>
 	</div>
 	);
 }
