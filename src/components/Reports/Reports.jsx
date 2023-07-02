@@ -9,44 +9,39 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { Dropdown } from 'primereact/dropdown';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
-import { InputText } from "primereact/inputtext";
 
 import { formatPrice } from "@src/helpers/PriceHelper";
 import { formatDate } from "@helpers/DateHelper"
-import { useAPI } from "@service/useAPI"
+import { useDynamicValues } from "@hooks/useDynamicValues"
 
 export default function Reports() {
 
-	const [Reports, setReports] = useState([])
+	const {data: reports} = useDynamicValues('service')
 	const [Stylists, setStylists] = useState([])
 	const [filters, setFilters] = useState({
-        stylistName: { constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }]},
-		serviceDate: { constraints: [{ value: null, matchMode: FilterMatchMode.DATE_AFTER }] }
+        stylistName: { value: null, matchMode: FilterMatchMode.EQUALS },
+		serviceDate: { value: null, matchMode: FilterMatchMode.DATE_AFTER }
     });
 	const [filteredReports, setFilteredReports] = useState([])
 	const [totalPaid, setTotalPaid] = useState(formatPrice(0))
 	const exportColumns = filteredReports.map((col) => ({ Estilista: col.stylistName, Precio: col.servicePrice, Fecha: col.serviceDate }));
 
-	//! Init Function
-	const getReports = async() => {
-		// eslint-disable-next-line
-		useAPI('GET',null,'service','get',null, (error,data) => {
-			setReports(prevData => data.data.map((e) => {
-				e.serviceDate = new Date(e.serviceDate);
-				return e;
-			}))
-
+	useEffect(() => {
+		if (reports.length != 0) {
 			let arrayUniques = new Set()
-			data.data.forEach((r) => {
+			reports.forEach((r) => {
 				arrayUniques.add(r.stylistName)
 			})
 			setStylists(Array.from(arrayUniques))
+		}
+	}, [reports])
+
+	const initFilters = () => {
+		setFilters({
+			stylistName: { value: null, matchMode: FilterMatchMode.EQUALS },
+			serviceDate: { value: null, matchMode: FilterMatchMode.DATE_AFTER }
 		})
 	}
-
-	useEffect(() => {
-		getReports()
-	}, [])
 
 	const exportPdf = () => {
         import('jspdf').then((jsPDF) => {
@@ -132,12 +127,10 @@ export default function Reports() {
         return formatDate(rowData.serviceDate);
     };
 
-	const getTotalPaid = () => {
+	const getTotalPaid = (data) => {
         let total = 0;
 
-		const Data = filteredReports != [] ? filteredReports : Reports
-
-        for (let rep of Data) {
+        for (let rep of data) {
             total += rep.servicePrice;
         }
 
@@ -145,7 +138,7 @@ export default function Reports() {
     };
 
 	const stylistsFilterTemplate = (options) => {
-        return <Dropdown value={options.value} options={Stylists} onChange={(e) => options.filterCallback(e.value)} placeholder="Selecciona una Estilista" />;
+        return <Dropdown value={options.value} options={Stylists} onChange={(e) => options.filterApplyCallback(e.value)} placeholder="Selecciona una Estilista" />;
     };
 
 	const footerGroup = (
@@ -158,34 +151,25 @@ export default function Reports() {
     );
 
 	const dateFilterTemplate = (options) => {
-        return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy"/>;
+        return <Calendar value={options.value} onChange={(e) => options.filterApplyCallback(e.value, options.index)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy"/>;
     };
 
-	const paginatorLeft = <Button type="button" icon="pi pi-filter-slash" text onClick={() => setFilters([])}/>;
+	const paginatorLeft = <Button type="button" icon="pi pi-filter-slash" text onClick={() => initFilters()}/>;
 	const paginatorRight = <Button type="button" icon="pi pi-refresh" text/>;
 
 	return (
 		<div>
 			<DataTable
-			header={TableHeader}
+				header={TableHeader}
 				showGridlines
 				filterDisplay="row"
 				filters={filters}
-				onFilter={(e) => {
-					setFilters(e.filters)
-				}}
 				onValueChange={(filteredData) => {
-					if (filteredData.length === Reports.length) {
-						setTotalPaid(formatPrice(0))
-					} else {
-						getTotalPaid()
-					}
+					if (filteredData.length != 0) { getTotalPaid(filteredData) }
 					setFilteredReports(prevData => filteredData)
 				}}
-				value={Reports}
+				value={reports}
 				dataKey="serviceId"
-				id="serviceId"
-				groupRowsBy="stylistName"
 				paginator
 				rows={10}
 				rowsPerPageOptions={[10, 25, 50, 75, 100]}
@@ -193,7 +177,7 @@ export default function Reports() {
 				paginatorLeft={paginatorLeft}
 				paginatorRight={paginatorRight}
 			>
-				<Column field="stylistName" filter filterField="stylistName" filterElement={stylistsFilterTemplate} sortable header="Peluquer@/Estilista"/>
+				<Column field="stylistName" filter filterField="stylistName" filterElement={stylistsFilterTemplate} showFilterMenu={false} sortable header="Peluquer@/Estilista"/>
 				<Column field="servicePrice" filterField="servicePrice" sortable header="Precio"/>
 				<Column field="serviceDate" filter filterField="serviceDate" filterElement={dateFilterTemplate} sortable header="Fecha del Servicio" dataType="date" body={dateBodyTemplate}/>
 			</DataTable>

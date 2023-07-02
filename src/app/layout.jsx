@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
 		monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
 		monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
 		dateIs: 'Igual',
-		dateIsNot: 'Desigual',
+		dateIsNot: 'Diferente De',
 		dateBefore: 'Antes',
 		dateAfter: 'Despues',
 		today: 'Hoy',
