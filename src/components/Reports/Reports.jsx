@@ -65,6 +65,8 @@ export default function Reports() {
 					body: AtributtesReport,
 					startY: 15
 				  })
+
+				doc.text("Total a Pagar: " + totalPaid, 10, doc.internal.pageSize.height - 10)
 				
                 doc.save('Reports.pdf');
             });
@@ -73,6 +75,7 @@ export default function Reports() {
 
     const exportExcel = () => {
         import('xlsx').then((xlsx) => {
+			exportColumns.push({Total: totalPaid})
             const worksheet = xlsx.utils.json_to_sheet(exportColumns);
             const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
             const excelBuffer = xlsx.write(workbook, {

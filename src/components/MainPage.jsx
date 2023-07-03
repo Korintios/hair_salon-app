@@ -1,5 +1,7 @@
 "use client"
 
+import Image from 'next/image'
+
 import { menuItems } from "@config/menuConfig";
 import { ModalContextProvider } from "@context/modalContextProvider";
 
@@ -10,7 +12,7 @@ export default function MainPage({ children }) {
 			<main>
 				<div className="sidebar flex justify-content-between flex-column">
 					<div className="sidebar-logo">
-						<h4>UWU</h4>
+						<Image src="/newlogo.png" width={50} height={30} alt='logo'/>
 					</div>
 					<ul>
 						{menuItems.map((e) => {
