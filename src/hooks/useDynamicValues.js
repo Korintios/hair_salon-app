@@ -12,9 +12,13 @@ export const useDynamicValues = (section) => {
 		// eslint-disable-next-line
 		useAPI("GET", null, section, "get", null, (error, data) => {
 			if (!error) {
-				if (section == 'service') {
+				if (section == 'service' || section == 'bill') {
 					setData(data.data.map((e) => {
-						e.serviceDate = new Date(e.serviceDate);
+						if (section == 'service') {
+							e.serviceDate = new Date(e.serviceDate)
+						} else {
+							e.billDate = new Date(e.billDate)
+						}
 						return e;
 					}))
 				} else {

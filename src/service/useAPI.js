@@ -13,7 +13,7 @@ export const useAPI = async (method = "GET", data = null, section, action, id, c
     let finalUrl
 
 	try {
-		if (section === "reception" || section === "inventory" || section === "service") {
+		if (section === "reception" || section === "inventory" || section === "service" || section === "bill") {
 			if (method === "POST" || method === "PUT" || method === "DELETE") {
 
                 finalUrl = BASE_URL.concat(section, "/", action)

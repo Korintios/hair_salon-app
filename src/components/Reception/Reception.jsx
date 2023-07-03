@@ -28,8 +28,6 @@ export default function Reception() {
 	// PDF
 	const exportPdf = (data) => {
 
-
-
         import('jspdf').then((jsPDF) => {
             import('jspdf-autotable').then(() => {
 				let totalPaid = 0
