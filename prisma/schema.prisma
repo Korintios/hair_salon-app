@@ -42,3 +42,11 @@ model Inventory {
   stylistManager String
   isActive Boolean @default(true)
 }
+
+model Bills {
+  billId Int @id @default(autoincrement())
+  stylistName String
+  billName String 
+  billPrice Int
+  billDate DateTime @default(now())
+}

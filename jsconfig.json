@@ -10,5 +10,6 @@
       "@service/*": ["src/service/*"],
       "@src/*": ["src/*"],
     }
-  }
+  },
+  "exclude": [".next", "build", "node_modules", "prisma", "public"]
 }
