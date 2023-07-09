@@ -40,10 +40,6 @@ export default function AddReceptionModal({setReceptions}) {
 				errors.clientName = REQUIRED_MSG;
 			}
 
-			if (!data.clientCc) {
-				errors.clientCc = REQUIRED_MSG;
-			}
-
 			if (target.length === 0) {
 				errors.services = REQUIRED_SERVICES
 			}
@@ -89,16 +85,6 @@ export default function AddReceptionModal({setReceptions}) {
 									{getFormErrorMessage(formik,'clientName')}
 								</div>
 							</div>
-							<div className="flex flex-auto flex-column gap-2">
-								<label>Identificacion de Cliente</label>
-								<InputText
-									value={formikValues.clientCc}
-									onChange={(e) => formik.setFieldValue("clientCc", e.target.value)}
-								/>
-								<div>
-									{getFormErrorMessage(formik,'clientCc')}
-								</div>
-							</div>
 						</div>
 						<div className="flex flex-column gap-2 mb-3">
 							<h4>Seleccion de Servicios</h4>
@@ -108,7 +94,7 @@ export default function AddReceptionModal({setReceptions}) {
 								onChange={onChange}
 								itemTemplate={itemTemplate}
 								filter
-								filterBy="name"
+								filterBy="itemName"
 								breakpoint="1400px"
 								sourceHeader="Servicios Disponibles"
 								targetHeader="Servicios Seleccionados"

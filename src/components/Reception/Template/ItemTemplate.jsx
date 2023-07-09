@@ -4,8 +4,8 @@ export const itemTemplate = (item) => {
             <div className="flex-1 flex flex-column gap-2">
                 <span className="font-bold">{item.itemName}</span>
                 <div className="flex align-items-center gap-2">
-                    <i className="pi pi-tag text-sm"></i>
-                    <span>{item.itemTag}</span>
+                    <i className="pi pi-user text-sm"></i>
+                    <span>{item.stylistManager}</span>
                 </div>
             </div>
             <span className="font-bold text-900">${item.itemPrice}</span>

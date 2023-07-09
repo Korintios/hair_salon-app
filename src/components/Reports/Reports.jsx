@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { Dropdown } from 'primereact/dropdown';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 
 import { formatPrice } from "@src/helpers/PriceHelper";
 import { formatDate } from "@helpers/DateHelper"
@@ -47,6 +47,7 @@ export default function Reports() {
         import('jspdf').then((jsPDF) => {
             import('jspdf-autotable').then(() => {
                 const doc = new jsPDF.default(0, 3);
+				doc.setScale(0.8)
 
 				const AtributtesReport = filteredReports.map((item) => {
 
