@@ -47,8 +47,6 @@ export default function Reports() {
         import('jspdf').then((jsPDF) => {
             import('jspdf-autotable').then(() => {
                 const doc = new jsPDF.default(0, 3);
-				doc.setScale(0.8)
-
 				const AtributtesReport = filteredReports.map((item) => {
 
 					const formatDateItem = formatDate(item.serviceDate)

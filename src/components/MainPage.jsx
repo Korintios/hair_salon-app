@@ -12,7 +12,7 @@ export default function MainPage({ children }) {
 			<main>
 				<div className="sidebar flex justify-content-between flex-column">
 					<div className="sidebar-logo">
-						<Image src="/newlogo.png" width={50} height={30} alt='logo'/>
+						<span>Logo</span>
 					</div>
 					<ul>
 						{menuItems.map((e) => {
