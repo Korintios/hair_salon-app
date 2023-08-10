@@ -27,11 +27,11 @@ body {
 }
 .sidebar-logo {
   padding: 15px 0px 15px 0px;
-  color: #e6007e;
+  color: #6366F1;
   text-align: center;
 }
 .sidebar i{
-  color: #e6007e;
+  color: #6366F1;
   height: 60px;
   min-width: 50px;
   font-size: 28px;
@@ -55,7 +55,7 @@ body {
   top: -20px;
   left: calc(100% + 25px);
   z-index: 3;
-  background: #e6007e;
+  background: #6366F1;
   color: #FFF;
   box-shadow: 0 5px 10px #FFF;
   padding: 6px 12px;
@@ -92,16 +92,16 @@ body {
   overflow: visible;
 }
 .sidebar-profile-info {
-  color: #e6007e;
+  color: #6366F1;
 }
 
 /* Estilo de NavList */
 
 .sidebar li a:hover {
-  background: #e6007e;
+  background: #6366F1;
 }
 .sidebar li a .links_name{
-  color: #e6007e;
+  color: #6366F1;
   font-size: 15px;
   font-weight: 400;
   white-space: nowrap;
@@ -120,7 +120,7 @@ body {
 }
 
 .sidebar-active {
-  background: #e6007e !important;
+  background: #6366F1 !important;
 }
 
 .sidebar-active i, .sidebar-active .links_name {
