@@ -1,8 +1,6 @@
 # Aplicacion de Peluqueria
 Este repositorio alberga el código fuente de una aplicación de gestión de peluquería que incluye módulos clave como Recepción, Inventario, Gastos y Reportes. Nuestra aplicación simplifica la gestión de citas, seguimiento de inventario, control de gastos y generación de informes, proporcionando una solución integral para ayudarte a administrar tu salón de belleza de manera eficiente y efectiva. Optimiza tus operaciones y toma decisiones basadas en datos con esta aplicación diseñada específicamente para el sector de la peluquería.
 
-![Presentacion](videos/presentation.gif)
-
 ## Pasos de Inicializacion
 Antes de realizar el primer comando primero asigna la ruta de la base de datos, del contario te dara error, tambien tener en cuenta los permisos del directorio donde asignes la base de datos.
 ```
