@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 
 import AddItemModal from "@src/components/Inventory/AddItemModal";
 import { useAPI } from "@service/useAPI"
-import { modalContext } from "@context/modalContextProvider";
+import { modalContext } from "@context/ModalContextProvider";
 import { useDynamicValues } from "@hooks/useDynamicValues";
 
 export default function Inventory() {

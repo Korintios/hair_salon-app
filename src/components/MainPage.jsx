@@ -1,9 +1,7 @@
 "use client"
 
-import Image from 'next/image'
-
 import { menuItems } from "@config/menuConfig";
-import { ModalContextProvider } from "@context/modalContextProvider";
+import { ModalContextProvider } from "@context/ModalContextProvider";
 
 export default function MainPage({ children }) {
 
