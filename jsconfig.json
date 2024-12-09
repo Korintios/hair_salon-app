@@ -8,7 +8,7 @@
       "@helpers/*": ["src/helpers/*"],
       "@utils/*": ["src/utils/*"],
       "@service/*": ["src/service/*"],
-      "@src/*": ["src/*"],
+      "@src/*": ["src/*"]
     }
   },
   "exclude": [".next", "build", "node_modules", "prisma", "public"]
