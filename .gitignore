@@ -19,3 +19,4 @@
 /prisma/migrations
 /prisma/database.db 
 /prisma/database.db-journal
+package-lock.json
