@@ -8,7 +8,7 @@ Este repositorio alberga el código fuente de una aplicación de gestión de pel
 ## Pasos de Inicializacion
 Antes de realizar el primer comando primero asigna la ruta de la base de datos, del contario te dara error, tambien tener en cuenta los permisos del directorio donde asignes la base de datos.
 ```
-npm prisma db push
+npx prisma db push
 npm install
 npm run dev
 ```
