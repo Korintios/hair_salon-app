@@ -5,13 +5,43 @@ Este repositorio alberga el código fuente de una aplicación de gestión de pel
   <img src="videos/modals.gif" alt="Menu Principal">
 </p>
 
-## Pasos de Inicializacion
+## 🚀 Pasos de Inicializacion
 Antes de realizar el primer comando primero asigna la ruta de la base de datos, del contario te dara error, tambien tener en cuenta los permisos del directorio donde asignes la base de datos.
 ```
 npx prisma db push
 npm install
 npm run dev
 ```
+
+## 🐋 Cómo usar esta aplicación con Docker
+1. Clona este repositorio
+```
+git clone https://github.com/Korintios/hair_salon-app.git
+cd tu-repositorio
+```
+2. Configura las variables de entorno
+Crea un archivo .env en el directorio raíz con las siguientes variables:
+```
+DATABASE_URL="file:./data/app.db"
+```
+Esto configura la base de datos SQLite y el entorno de producción.
+
+3. Construye la imagen de Docker
+Ejecuta el siguiente comando para construir la imagen de Docker:
+```
+docker build -t nombre-imagen .
+```
+
+4. Ejecuta el contenedor
+Inicia la aplicación en un contenedor Docker:
+```
+docker run -d -p 3000:3000 nombre-imagen
+```
+
+5. Accede a la aplicación
+Abre tu navegador y visita: http://localhost:3000
+
+<hr/>
 
 ## Informacion Principal
 | Funcionalidad | Descripcion |
