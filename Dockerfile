@@ -23,7 +23,6 @@ COPY .env .env
 RUN npm run build
 
 # Migrar las tablas a la base de datos
-RUN npx prisma migrate deploy
 RUN npx prisma db push
 
 # Establece el entorno de producción
