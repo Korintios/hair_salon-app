@@ -1,6 +1,9 @@
 # Usa una imagen base ligera con Node.js
 FROM node:lts-alpine
 
+# Instala OpenSSL
+RUN apk add --no-cache openssl
+
 # Configura el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
