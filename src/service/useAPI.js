@@ -8,7 +8,7 @@
  * @param {*} callback Funcion a retornar.
  */
 export const useAPI = async (method = "GET", data = null, section, action, id, callback) => {
-	const BASE_URL = "http://localhost:3000/api/";
+	const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 	let RequestInit = {};
     let finalUrl
 
