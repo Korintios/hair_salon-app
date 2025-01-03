@@ -27,6 +27,7 @@ RUN npx prisma db push
 
 # Establece el entorno de producción
 ENV NODE_ENV=production
+ENV DATABASE_URL="file:../data/app.sqlite"
 
 # Expone el puerto que usará Next.js
 EXPOSE 3000
