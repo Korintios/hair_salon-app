@@ -16,8 +16,8 @@ RUN npm install --production
 # Copia el resto de los archivos del proyecto al contenedor
 COPY . .
 
-# Copiar variables de entorno
-COPY .env .env
+# Copiar variables de entorno (recomendado para desarrollo)
+# COPY .env .env
 
 # Genera el build de producción de Next.js
 RUN npm run build
